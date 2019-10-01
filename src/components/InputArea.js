@@ -7,14 +7,41 @@ class InputArea extends React.Component {
         this.state = {
             seqsArray: [],
             labelsArray: [],
-            window: 0,
-            step: 0,
+            windowWidth: 0,
+            stepLength: 0,
         }
+        this.handleChange = this.handleChange.bind(this)
+    }
+    handleChange(e){
+        const {name, value} = e.target
+        this.setState({
+            [name] : value
+        })
     }
     render(){
         return(
             <InputStyle>
-                Siema siema
+                <label>
+                    Window width (bp)
+                    <br/>
+                    <input 
+                        type="text" 
+                        name="windowWidth" 
+                        value={this.state.windowWidth} 
+                        onChange={this.handleChange}   
+                    />
+                </label>
+                <br/>
+                <label>
+                    Step length (bp)
+                    <br/>
+                    <input 
+                        type="text" 
+                        name="stepLength" 
+                        value={this.state.stepLength} 
+                        onChange={this.handleChange}   
+                    />
+                </label>
             </InputStyle>
         )
     }

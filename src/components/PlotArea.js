@@ -151,7 +151,7 @@ class PlotArea extends React.Component {
               <div className="legend">
                 <DiscreteColorLegend
                   onItemClick={this._clickHandler}
-                  width={180}
+                  width={100}
                   items={series} />
               </div>
             </PlotStyle>
