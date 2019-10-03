@@ -1,6 +1,7 @@
 import React from 'react'
 import InputStyle from '../styles/InputStyle'
-import {returnSequences, returnLabels} from './PlotLogic'
+import {returnSequences, returnLabels, returnATPercentData} from './PlotLogic'
+
 
 class InputArea extends React.Component {
     constructor(){
@@ -10,7 +11,8 @@ class InputArea extends React.Component {
             seqsArray: [],
             labelsArray: [],
             windowWidth: 0,
-            stepLength: 0, 
+            stepLength: 0,
+            data : [] 
         }
         this.handleChange = this.handleChange.bind(this)
         this.fileInput = React.createRef();
@@ -19,7 +21,7 @@ class InputArea extends React.Component {
     handleChange(e){
         const {name, value} = e.target
         this.setState({
-            [name] : value
+            [name] : Number(value)
         })
     }
     handleSubmit(e) {
@@ -28,14 +30,12 @@ class InputArea extends React.Component {
         if (file.type.match( /text.*/)) {
             let reader = new FileReader();
             reader.onload = () => {
+                const fileContent = reader.result
                 this.setState({
-                    fileContent : reader.result
+                    seqsArray: returnSequences(fileContent),
+                    labelsArray: returnLabels(fileContent)
                 },
-                // sketchy
-                () => this.setState({
-                    seqsArray: returnSequences(this.state.fileContent),
-                    labelsArray: returnLabels(this.state.fileContent)
-                })
+                 () => console.log(returnATPercentData(this.state.seqsArray,this.state.stepLength,this.state.windowWidth,0))
                 )
             }
             reader.readAsText(file);
