@@ -10,8 +10,6 @@ export const returnSequences = (fileContent) => {
     }
     return seqs;
 }
-
-
 export const returnLabels = (fileContent) => {
     let labels = (fileContent.toLowerCase()).split('>')
     labels.shift();
@@ -21,11 +19,10 @@ export const returnLabels = (fileContent) => {
     }
     return labels;
 }
-
+ //calculating average AT % for given window
 
 //returns array of AT % for each position translated from step value for given sequence 
 export const returnATPercentData= (sequenceArray, step, range, counter) => {
-     //calculating average AT % for given window
      const atPercent = (singleSequence, start, range) => {
         let countAT = 0;
         for (let i = start; i < (start + range); i++) {
@@ -38,7 +35,7 @@ export const returnATPercentData= (sequenceArray, step, range, counter) => {
     const sequence = sequenceArray[counter];
     let positions = [];
     let atPercentArray = [];
-    let dataset = [];
+    let data = [];
     // creating array of positions for given sequence
     for (let i = 0; i < sequence.length; i += step) {
         positions.push(i);
@@ -60,7 +57,8 @@ export const returnATPercentData= (sequenceArray, step, range, counter) => {
     };
 
     for (let j = 0; j < positions.length; j++){
-        dataset.push({x: positions[j], y: atPercentArray[j]})
+        data.push({x: positions[j], y: atPercentArray[j]})
     }
-    return dataset
+
+    return data
 }

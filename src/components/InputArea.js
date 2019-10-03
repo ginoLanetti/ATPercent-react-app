@@ -27,6 +27,7 @@ class InputArea extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         let file = this.fileInput.current.files[0]
+        console.log(file.type)
         if (file.type.match( /text.*/)) {
             let reader = new FileReader();
             reader.onload = () => {
@@ -38,9 +39,10 @@ class InputArea extends React.Component {
                  () => console.log(returnATPercentData(this.state.seqsArray,this.state.stepLength,this.state.windowWidth,0))
                 )
             }
+            
             reader.readAsText(file);
         } else {
-            alert('File not supported!')
+            alert('File not supported!\nTip: Try changing uploaded file\'s extension to .txt')
         }
     }
     render(){
