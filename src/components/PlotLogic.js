@@ -22,43 +22,57 @@ export const returnLabels = (fileContent) => {
  //calculating average AT % for given window
 
 //returns array of AT % for each position translated from step value for given sequence 
-export const returnATPercentData= (sequenceArray, step, range, counter) => {
-     const atPercent = (singleSequence, start, range) => {
-        let countAT = 0;
-        for (let i = start; i < (start + range); i++) {
-            if ((singleSequence[i] === 'a') || (singleSequence[i] === 't')) {
-                countAT++
-            }
-        }
-        return (countAT / range) * 100;
-    }  
-    const sequence = sequenceArray[counter];
-    let positions = [];
-    let atPercentArray = [];
-    let data = [];
-    // creating array of positions for given sequence
-    for (let i = 0; i < sequence.length; i += step) {
-        positions.push(i);
-    }
-    //optimization of last positions
-    let division = Math.ceil(range / step)
-    if ((range === step) && (sequence % range !== 0)) {
-        positions.pop();
-        positions.push((sequence.length - 1) - range);
-    } else if (step <= 1) {
-        positions.splice((positions.length - division), division);
-    } else if (step > 1) {
-        positions.splice((positions.length - division), division);
-        positions.push((sequence.length - 1) - range);
-    }
-
-    for (const position of positions) {
-        atPercentArray.push(atPercent(sequence, position, range));
-    };
-
-    for (let j = 0; j < positions.length; j++){
-        data.push({x: positions[j], y: atPercentArray[j]})
-    }
-
-    return data
+export const returnATPercentDataSeries= (sequences, step, windowWidth, labels, counter) => {
+    const atPercent = (singleSequence, start, windowWidth) => {
+       let countAT = 0;
+       for (let i = start; i < (start + windowWidth); i++) {
+           if ((singleSequence[i] === 'a') || (singleSequence[i] === 't')) {
+               countAT++
+           }
+       }
+       return (countAT / windowWidth) * 100;
+   }  
+   let series = [];
+   for(let i = 0; i < counter; i++) {
+       let sequence = sequences[i];
+       let positions = [];
+       let atPercentArray = [];
+       let data = [];
+       let dataset = {
+       title: labels[i],
+       disabled: false,
+       data: []
+       }
+       // creating array of positions for given sequence
+       let  isIncomplete = false;
+       for (let j = 0; j < sequence.length; j += step) {
+           if (j+(windowWidth-1) < (sequence.length-1)){
+                positions.push(j);
+                isIncomplete = true;
+           } else if (j+(windowWidth-1) === (sequence.length-1)) {
+                positions.push(j);
+                isIncomplete = false;
+           }
+       }
+       if (isIncomplete) {
+            positions.push((sequence.length) - windowWidth);
+       }
+       // creating array of AT% for each window 
+       for (const position of positions) {
+       atPercentArray.push(atPercent(sequence, position, windowWidth));
+       };
+       //creating dataset for chart rendering
+       for (let k = 0; k < positions.length; k++){
+       data.push({x: positions[k], y: atPercentArray[k]})
+       }
+       dataset.data = data;
+       series.push(dataset)
+   }  
+   return series 
 }
+
+
+
+
+
+

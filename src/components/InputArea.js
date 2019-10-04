@@ -1,6 +1,6 @@
 import React from 'react'
 import InputStyle from '../styles/InputStyle'
-import {returnSequences, returnLabels, returnATPercentData} from './PlotLogic'
+import {returnSequences, returnLabels, returnATPercentDataSeries} from './PlotLogic'
 
 
 class InputArea extends React.Component {
@@ -36,7 +36,7 @@ class InputArea extends React.Component {
                     seqsArray: returnSequences(fileContent),
                     labelsArray: returnLabels(fileContent)
                 },
-                 () => console.log(returnATPercentData(this.state.seqsArray,this.state.stepLength,this.state.windowWidth,0))
+                 () => console.log(returnATPercentDataSeries(this.state.seqsArray,this.state.stepLength,this.state.windowWidth,this.state.labelsArray,this.state.seqsArray.length))
                 )
             }
             
